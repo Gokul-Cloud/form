@@ -1,44 +1,45 @@
 /* eslint-disable no-prototype-builtins */
-import { useState } from "react"; 
-
+import { useState } from "react";
+import "./form.css";
 
 const FormWithPopup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    age: "",
+    phone: "",
     gender: "",
     birthdate: "",
-    favoriteColor: "",
-    Student: false
+    Address: "",
+    Student: false,
   });
 
+  const [showPopup, setShowPopup] = useState(false);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+    const fieldValue = type === "checkbox" ? checked : value;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: fieldValue,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowPopup(true);
+  };
 
-    let popupContent = "Submitted Data" + '\n';
-    for (let key in formData) {
-      if (formData.hasOwnProperty(key)) {
-        popupContent +=   key + `: ` + formData[key] + '\n';
-      }
-    }
-
-    window.alert(popupContent);
+  const handleClose = () => {
+    setShowPopup(false);
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form-container" onSubmit={handleSubmit}>
         <label>
           Name:
           <input
+            className="form-input"
             type="text"
             name="name"
             value={formData.name}
@@ -49,6 +50,7 @@ const FormWithPopup = () => {
         <label>
           Email:
           <input
+            className="form-input"
             type="email"
             name="email"
             value={formData.email}
@@ -57,18 +59,24 @@ const FormWithPopup = () => {
         </label>
         <br />
         <label>
-          Age:
+          Mobile Number:
           <input
-            type="number"
-            name="age"
-            value={formData.age}
+            className="form-input"
+            type="text"
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
           />
         </label>
         <br />
         <label>
           Gender:
-          <select name="gender" value={formData.gender} onChange={handleChange}>
+          <select
+            className="form-input"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+          >
             <option value="">Select</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -79,6 +87,7 @@ const FormWithPopup = () => {
         <label>
           Birthdate:
           <input
+            className="form-input"
             type="date"
             name="birthdate"
             value={formData.birthdate}
@@ -87,11 +96,12 @@ const FormWithPopup = () => {
         </label>
         <br />
         <label>
-          Favorite Color:
+          Address:
           <input
-            type="color"
-            name="favoriteColor"
-            value={formData.favoriteColor}
+            className="form-input"
+            type="text"
+            name="Address"
+            value={formData.Address}
             onChange={handleChange}
           />
         </label>
@@ -99,15 +109,37 @@ const FormWithPopup = () => {
         <label>
           Student:
           <input
+            className="form-input"
             type="checkbox"
             name="Student"
             checked={formData.Student}
             onChange={handleChange}
           />
         </label>
-        <br/>
-        <button type="submit">Submit</button>
+        <br />
+        <button className="form-submit" type="submit">
+          Submit
+        </button>
       </form>
+      {showPopup && (
+        <div className="popup-container">
+          <div className="popup-box">
+            <h2 className="popup-title"> Details</h2>
+            <div className="popup-details">
+              <p>Name: {formData.name}</p>
+              <p>Email: {formData.email}</p>
+              <p>Gender: {formData.gender}</p>
+              <p>Phone: {formData.phone}</p>
+              <p>Date of birth: {formData.birthdate}</p>
+              <p>Student: {formData.Student ? "Yes" : "No"}</p>
+              <p>address: {formData.Address}</p>
+            </div>
+            <button className="popup-close" onClick={handleClose}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
