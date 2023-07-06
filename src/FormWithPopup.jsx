@@ -228,6 +228,7 @@ const FormWithPopup = () => {
             name="address"
             value={formData.address}
             onChange={handleChange}
+            placeholder="Address..."
           />
           {formErrors.address && (
             <p className="form-error">{formErrors.address}</p>
